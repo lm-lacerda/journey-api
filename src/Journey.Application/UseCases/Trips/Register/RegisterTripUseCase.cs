@@ -5,51 +5,50 @@ using Journey.Exception.ExceptionsBase;
 using Journey.Infrastructure;
 using Journey.Infrastructure.Entities;
 
-namespace Journey.Application.UseCases.Trips.Register
+namespace Journey.Application.UseCases.Trips.Register;
+
+public class RegisterTripUseCase
 {
-    public class RegisterTripUseCase
+    public ResponseShortTripJson Execute(RequestRegisterTripJson request)
     {
-        public ResponseShortTripJson Execute(RequestRegisterTripJson request)
+        Validate(request);
+
+        var dbContext = new JourneyDbContext();
+
+        var entity = new Trip
         {
-            Validate(request);
+            Name = request.Name,
+            StartDate = request.StartDate,
+            EndDate = request.EndDate
+        };
 
-            var dbContext = new JourneyDbContext();
+        dbContext.Trips.Add(entity);
 
-            var entity = new Trip
-            {
-                Name = request.Name,
-                StartDate = request.StartDate,
-                EndDate = request.EndDate
-            };
+        dbContext.SaveChanges();
 
-            dbContext.Trips.Add(entity);
+        return new ResponseShortTripJson
+        {
+            Name = entity.Name,
+            StartDate = entity.StartDate,
+            EndDate = entity.EndDate
+        };
+    }
 
-            dbContext.SaveChanges();
-
-            return new ResponseShortTripJson
-            {
-                Name = entity.Name,
-                StartDate = entity.StartDate,
-                EndDate = entity.EndDate
-            };
+    private void Validate(RequestRegisterTripJson request)
+    {
+        if (string.IsNullOrWhiteSpace(request.Name))
+        {
+            throw new JourneyException(ResourceErrorMessages.NAME_EMPTY);
         }
 
-        private void Validate(RequestRegisterTripJson request)
+        if (request.StartDate < DateTime.UtcNow)
         {
-            if (string.IsNullOrWhiteSpace(request.Name))
-            {
-                throw new JourneyException(ResourceErrorMessages.NAME_EMPTY);
-            }
+            throw new JourneyException(ResourceErrorMessages.DATE_TRIP_MUST_BE_LATER_THAN_TODAY);
+        }
 
-            if (request.StartDate < DateTime.UtcNow)
-            {
-                throw new JourneyException(ResourceErrorMessages.DATE_TRIP_MUST_BE_LATER_THAN_TODAY);
-            }
-
-            if (request.EndDate < request.StartDate)
-            {
-                throw new JourneyException(ResourceErrorMessages.END_DATE_TRIP_MUST_BE_LATER_START_DATE);
-            }
+        if (request.EndDate < request.StartDate)
+        {
+            throw new JourneyException(ResourceErrorMessages.END_DATE_TRIP_MUST_BE_LATER_START_DATE);
         }
     }
 }

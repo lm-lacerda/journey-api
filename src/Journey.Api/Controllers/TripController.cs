@@ -3,31 +3,30 @@ using Journey.Communication.Requests;
 using Journey.Exception.ExceptionsBase;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Journey.Api.Controllers
+namespace Journey.Api.Controllers;
+
+[Route("api/[controller]")]
+[ApiController]
+public class TripController : ControllerBase
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class TripController : ControllerBase
+    [HttpPost]
+    public IActionResult Register([FromBody] RequestRegisterTripJson request)
     {
-        [HttpPost]
-        public IActionResult Register([FromBody] RequestRegisterTripJson request)
+        try
         {
-            try
-            {
-                var useCase = new RegisterTripUseCase();
+            var useCase = new RegisterTripUseCase();
 
-                var response = useCase.Execute(request);
+            var response = useCase.Execute(request);
 
-                return Created(string.Empty, response);
-            }
-            catch (JourneyException ex)
-            {
-                return BadRequest(ex.Message);
-            }
-            catch
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, "Unknown error");
-            }
+            return Created(string.Empty, response);
+        }
+        catch (JourneyException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+        catch
+        {
+            return StatusCode(StatusCodes.Status500InternalServerError, "Unknown error");
         }
     }
 }
