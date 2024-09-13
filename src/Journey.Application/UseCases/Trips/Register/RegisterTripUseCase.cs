@@ -6,7 +6,6 @@ using Journey.Infrastructure;
 using Journey.Infrastructure.Entities;
 
 namespace Journey.Application.UseCases.Trips.Register;
-
 public class RegisterTripUseCase
 {
     public ResponseShortTripJson Execute(RequestRegisterTripJson request)
