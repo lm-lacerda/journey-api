@@ -135,4 +135,7 @@
   <data name="TRIP_NOT_FOUND" xml:space="preserve">
     <value>Trip not found.</value>
   </data>
+  <data name="UNKNOWN_ERROR" xml:space="preserve">
+    <value>Unknown error.</value>
+  </data>
 </root>

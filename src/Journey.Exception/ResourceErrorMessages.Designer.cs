@@ -113,5 +113,14 @@ namespace Journey.Exception {
                 return ResourceManager.GetString("TRIP_NOT_FOUND", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unknown error..
+        /// </summary>
+        public static string UNKNOWN_ERROR {
+            get {
+                return ResourceManager.GetString("UNKNOWN_ERROR", resourceCulture);
+            }
+        }
     }
 }

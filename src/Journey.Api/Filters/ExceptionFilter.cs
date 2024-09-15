@@ -1,4 +1,5 @@
 ﻿using Journey.Communication.Responses;
+using Journey.Exception;
 using Journey.Exception.ExceptionsBase;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
@@ -23,7 +24,7 @@ public class ExceptionFilter : IExceptionFilter
         {
             context.HttpContext.Response.StatusCode = StatusCodes.Status500InternalServerError;
 
-            var responseJson = new ResponseErrorsJson(new List<string> { "Unknown error" });
+            var responseJson = new ResponseErrorsJson(new List<string> { ResourceErrorMessages.UNKNOWN_ERROR });
 
             context.Result = new ObjectResult(responseJson);
         }
